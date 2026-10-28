@@ -1,0 +1,50 @@
+Overview
+Field	Details
+Lab / challenge	Pickle Rick (Rick and Morty)
+Platform	TryHackMe
+Category	Capture the Flag (CTF) · Web / Linux Security
+Date completed	18/10/2026
+Difficulty	Begginer
+Environment	Authorized CTF laboratory
+Objective	Locate the three requested flags/ingredients in the challenge environment.
+
+
+1. Objective and Scope
+The goal of this challenge was to explore a deliberately vulnerable, Rick and Morty-themed environment and locate three pieces of information requested by the CTF. 
+Work was performed exclusively within the authorized challenge infrastructure.
+
+2. Lab Setup and Tools
+- Operating system: Kali Linux VM
+- Connectivity: Tryhackme VPN
+- Target identifier: lab machine
+- Tools used: terminal, browser
+3. Methodology and Findings
+3.1 Reconnaissance
+Purpose: Identify available services, exposed interfaces, and initial points of investigation.
+- Actions performed: 
+  -Send a small ping
+  -Nmap ports scan
+  
+- Commands and relevant output: [PLACEHOLDER: sanitized commands/output]
+- Observation: [PLACEHOLDER: what you discovered]
+3.2 Initial Access / Challenge Progress
+- Entry point or clue: webshell
+- Steps actually performed: [PLACEHOLDER: numbered summary of your actions]
+- Why the method worked: web shell directly configured to the servers system
+3.3 Flag 1
+- Location or discovery method: [PLACEHOLDER]
+- Technical reasoning: [PLACEHOLDER]
+- Verification: [PLACEHOLDER: Flag 1 found / platform confirmation]
+3.4 Flag 2
+- Location or discovery method: [PLACEHOLDER]
+- Technical reasoning: [PLACEHOLDER]
+3.5 Flag 3
+- Location or discovery method: [PLACEHOLDER]
+- Technical reasoning: [PLACEHOLDER]
+3.6 Privilege Escalation (only if performed)
+- Starting permissions: [PLACEHOLDER]
+- Misconfiguration or weakness: web shell
+- How higher privileges were confirmed: whoami
+- Security impact: Critic
+
+## Evidence
