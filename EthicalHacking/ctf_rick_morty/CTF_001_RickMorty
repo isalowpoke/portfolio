@@ -22,11 +22,12 @@ Work was performed exclusively within the authorized challenge infrastructure.
 3.1 Reconnaissance
 Purpose: Identify available services, exposed interfaces, and initial points of investigation.
 - Actions performed: 
-  -Send a small ping
-    - *ping -c2 10.64.134.204*
-  -Nmap ports scan
-  
-- Commands and relevant output: 
+  -Send a small ping to verify I am connected to the machine and mi vpn works
+    - *ping -c2 10.64.134.204* 
+      **successful**
+  -Start a ports scan to identify probable vulnerabilities and export results into a grapeable format easy to read and reutilize
+    sudo nmap -p- --open -sS --min-rate 5000 -n -Pn -vvv 10.64.134.204 -oG allports
+    -We discover that 2 ports are open the http/80 and ssh/22 both TCP
 - Observation: 
 3.2 Initial Access / Challenge Progress
 - Entry point or clue: webshell
@@ -46,4 +47,3 @@ Purpose: Identify available services, exposed interfaces, and initial points of 
 - How higher privileges were confirmed: whoami
 - Security impact: Critic
 
-## Evidence
