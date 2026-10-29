@@ -123,7 +123,7 @@ Summary: Access and analyze web server witch commands and discovered a web log i
     - $ sudo su
   - It worked, now we are superuser, lets navigate to the root directory
     - $ cd /root/
-    - # ls
+    - #ls
     - 3rd.txt
-    - # cat 3rd.txt
+    - #cat 3rd.txt
   - Done
