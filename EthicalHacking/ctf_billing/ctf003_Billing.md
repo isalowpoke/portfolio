@@ -77,7 +77,7 @@ Summary: Access and analyze ports to find and exploit a wordpress login
   - cat README.md
     - Usage: exp.sh <TARGET_URL> <COMMAND>
   This exploit works using an Encoded URL, prints the command and executes it 
-3.2 Privilege Escalation 
+### 3.2 Privilege Escalation 
 - Misconfiguration or weakness: CVE 2023-30258
 - How higher privileges were confirmed: whoami
 - Security impact: Critic
@@ -122,7 +122,7 @@ Summary: Access and analyze ports to find and exploit a wordpress login
       - whoami
           -root
     - *we are root*
-3.3 Flag 1
+### 3.3 Flag 1
 - Location or discovery method: Directory root
 - Technical reasoning: If I can check quick pages like this, we can obtain or not, important information in a short time
 - Actions performed:
@@ -130,7 +130,7 @@ Summary: Access and analyze ports to find and exploit a wordpress login
       - find / -iname "user.txt" -o -iname "root.txt" 2>/dev/null
     - cat /root/root.txt
       - I have 1st flag
-3.4 Flag 2
+### 3.4 Flag 2
 - Location or discovery method: directory /home/magnus
 - Actions performed:
   - cat /home/magnus/user.txt
