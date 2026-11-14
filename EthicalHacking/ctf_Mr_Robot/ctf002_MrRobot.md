@@ -42,7 +42,7 @@ Summary: Access and analyze ports to find and exploit a wordpress login
     - Lets see robots.txt, because is plain text, it doesn't take too much time
       
       
-3.3 Flag 1
+### 3.3 Flag 1
 - Location or discovery method: Directory hidden in robots.txt
 - Technical reasoning: If I can check quick pages like this, we can obtain or not, important information in a short time
 - Actions performed:
@@ -51,7 +51,7 @@ Summary: Access and analyze ports to find and exploit a wordpress login
     - I'm going to download the dic to open the key.txt
     - wget http://10.66.173.68/fsociety.dic
       - Open the key and we have 1st flag
-3.4 Flag 2
+### 3.4 Flag 2
 - Location or discovery method: WP XML-RCP exploit
 - Technical reasoning: Using a remote call prodecure allow us to try obtain SU privileges
 - Actions performed: 
@@ -91,10 +91,10 @@ Summary: Access and analyze ports to find and exploit a wordpress login
       - #whoami  root
     - Navigate to the previous flag and now its open 
   -Second flag done
-3.5 Flag 3
+### 3.5 Flag 3
 - Location or discovery method: servers directory
 - Technical reasoning: When we don´t see the responses, we can try to obtain all system control by using a privilege scalation when we are already inside the system
-3.6 Privilege Escalation 
+### 3.6 Privilege Escalation 
 - Starting permissions: root
 - Misconfiguration or weakness: server system
 - How higher privileges were confirmed: whoami
