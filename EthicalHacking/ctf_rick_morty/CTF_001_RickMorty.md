@@ -47,7 +47,7 @@ Summary: Access and analyze web server witch commands and discovered a web log i
       - whoami
       - I'm *www-data* a normal user in apache, but we have access to the server
 - Observation: 
-3.2 Initial Access
+### 3.2 Initial Access
 - Entry point or clue: webshell by a command pannel, easy access to the file, it didn't required root permissions
 - Why the method worked: web shell to stablish connection with servers system
 - Actions performed:
@@ -81,7 +81,7 @@ Summary: Access and analyze web server witch commands and discovered a web log i
       - stty rows 33 columns 149
   - Start to work after that
       
-3.3 Flag 1
+### 3.3 Flag 1
 - Location or discovery method: Main directory after access to the server
 - Technical reasoning: I need to see what things can I do in every step, because it's important to improve time 
   and sometimes we don't know full access to complish our objectives
@@ -94,7 +94,7 @@ Summary: Access and analyze web server witch commands and discovered a web log i
     - oh there is the first ingredient Sup3rs3cretPickl3Ingred.txt , lets see if I can open it
     - cat Sup3rs3cretPickl3Ingred.txt
     - yes, I can, perfect I have first flag
-3.4 Flag 2
+### 3.4 Flag 2
 - Location or discovery method: File on a home directory, no root permissions required
 - Technical reasoning: I need to check and start by the basics, something many system has is the home directory
 - Actions performed: 
@@ -107,7 +107,7 @@ Summary: Access and analyze web server witch commands and discovered a web log i
     - 'second ingredients'
     - $ cat 'second ingredients'
   -Second flag done
-3.5 Flag 3
+### 3.5 Flag 3
 - Location or discovery method: root directory
 - Technical reasoning: When we don´t see the responses, we can try to obtain all system control by using a privilege scalation when we are already inside the system
 3.6 Privilege Escalation 
